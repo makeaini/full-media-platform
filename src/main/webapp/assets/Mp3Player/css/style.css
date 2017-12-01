@@ -1,0 +1,179 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+       box-sizing: border-box;
+}
+
+
+#musicplay .music-player {
+  position: relative;
+  width: 350px;
+  height: 290px;
+  margin: 150px auto;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  background: #222;
+  overflow: hidden;
+  z-index: 0;
+}
+#musicplay .music-player img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  z-index: -1;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  -webkit-filter: blur(2px);
+          filter: blur(2px);
+}
+#musicplay .music-player .info {
+  width: 100%;
+  height: 100px;
+  background: #222;
+  background: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  position: relative;
+}
+#musicplay .music-player .info .jp-playlist li {
+  display: none;
+}
+#musicplay .music-player .info .jp-playlist li a {
+  font-size: 20px;
+  font-weight: 300;
+  text-decoration: none;
+  color: #fff;
+  color: rgba(225, 225, 225, 0.4);
+}
+#musicplay .music-player .info .jp-playlist li a span {
+  font-size: 14px;
+  display: block;
+  margin-top: 10px;
+}
+#musicplay .music-player .info .jp-playlist li.jp-playlist-current {
+  display: block;
+}
+#musicplay .music-player .info .jp-playlist li .jp-free-media, .music-player .info .jp-playlist li .jp-playlist-item-remove {
+  display: none;
+}
+#musicplay .music-player .info .left, .music-player .info .right {
+  width: 25px;
+  position: absolute;
+  top: 30px;
+  left: 30px;
+}
+#musicplay .music-player .info .right {
+  left: auto;
+  right: 30px;
+}
+
+#musicplay .music-player .info .center {
+  padding: 20px 0 0;
+}
+#musicplay .music-player .progress, .music-player .volume-level {
+  width: 100%;
+  height: 5px;
+  display: block;
+  background: #000;
+  position: absolute;
+  bottom: 0px;
+  cursor: pointer;
+}
+#musicplay .music-player .progress span, .music-player .volume-level span {
+  position: relative;
+  display: block;
+  background: #ed553b;
+  width: 0%;
+  height: 5px;
+}
+
+#musicplay .music-player .controls {
+  text-align: center;
+  width: 100%;
+  height: 190px;
+  background: #982e4b;
+  background: rgba(152, 46, 75, 0.6);
+}
+#musicplay .music-player .controls .current {
+  font-size: 48px;
+  color: #fff;
+  color: rgba(225, 225, 225, 0.4);
+  padding: 15px 0 20px;
+}
+#musicplay .music-player .controls .play-controls a {
+  display: inline-block;
+  width: 35px;
+  margin: 0 30px;
+}
+#musicplay .music-player .controls .volume-level {
+  position: relative;
+  bottom: auto;
+  width: 200px;
+  height: 2px;
+  margin: 30px auto 0;
+  background: rgba(225, 225, 225, 0.3);
+}
+#musicplay .music-player .controls .volume-level span {
+  height: 2px;
+}
+
+#musicplay .music-player .controls .volume-level a {
+  position: absolute;
+  right: -32px;
+  top: -8px;
+  width: 22px;
+}
+#musicplay .music-player .controls .volume-level a.icon-volume-down {
+  right: auto;
+  left: -25px;
+}
+
+#musicplay [class^="icon-"] {
+  width: 18px;
+  height: 18px;
+  background: url("../images/E09T8tf.png") no-repeat center;
+  display: block;
+}
+
+#musicplay .icon-shuffle {
+  background-image: url("../images/AQAxRxS.png");
+}
+#musicplay .icon-heart {
+  background-image: url("../images/E09T8tf.png");
+}
+#musicplay .icon-repeat {
+  background-image: url("../images/338F8MX.png");
+}
+#musicplay .icon-share {
+  background-image: url("../images/PGIC6ME.png");
+}
+#musicplay .icon-previous {
+  background-image: url("../images/LIqj0nr.png");
+}
+#musicplay .icon-play {
+  background-image: url("../images/xlBv5aR.png");
+}
+#musicplay .icon-pause {
+  background-image: url("../images/lIhwduj.png");
+}
+#musicplay .icon-next {
+  background-image: url("../images/RIqj0nr.png");
+}
+#musicplay .icon-volume-up {
+  background-image: url("../images/qqdoddi.png");
+}
+#musicplay .icon-volume-down {
+  background-image: url("../images/3iirf2f.png");
+}
+
+#musicplay .copyrights {
+  text-align: center;
+  text-transform: capitalize;
+  margin: 50px;
+  color: rgba(0, 0, 0, 0.6);
+}
+#musicplay .copyrights a {
+  color: rgba(152, 46, 75, 0.9);
+  text-decoration: none;
+}

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+ 		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
+
+	<!-- 注解探测器（组件扫描）@Controller -->
+	<context:component-scan base-package="com.inred.media.controller">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Repository" />
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Service" />
+	</context:component-scan>
+
+	<!-- 启动springMVC的注解功能，他会自动注册HandlerMapping,HandlerAdapter,ExceptionResolver的相关实例 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean
+				class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+			<ref bean="stringHttpMessageConverter" />
+			<ref bean="fastJsonHttpMessageConverter" />
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<bean id="stringHttpMessageConverter"
+		class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+	</bean>
+	<!-- 配置Fastjson支持 -->
+	<bean id="fastJsonHttpMessageConverter"
+		class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>application/json</value>
+			</list>
+		</property>
+		<property name="features">
+			<list>
+				<value>WriteMapNullValue</value>
+				<value>QuoteFieldNames</value>
+			</list>
+		</property>
+	</bean>
+
+	<!--由于web.xml中设置是由springMVC拦截所有请求，于是在读取静态资源文件的时候就会受到影响（说白了就是读不到） 经过下面的配置，该标签的作用就是所有页面中引用/css/**的资源，都会从/resources/styles/ 
+		里面查找 -->
+	<mvc:view-controller path="index" view-name="index" />
+	<mvc:view-controller path="login" view-name="login" />
+	<mvc:resources mapping="/logs/**" location="/logs/" />
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+	<!-- 拦截器 -->
+	<!-- 多个拦截器,顺序执行 -->
+	<!-- 如果不配置或/*,将拦截所有的Controller -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/file/**" />
+		    <mvc:mapping path="/grade/**" />
+		    <mvc:mapping path="/personalfile/**" />
+		    <mvc:mapping path="/resourcesCenter/**" />
+		    <mvc:mapping path="/school/**" />
+		    <mvc:mapping path="/subject/**" />
+		    <mvc:mapping path="/resources/**" />
+		    <mvc:mapping path="/resourcesType/**"/>
+		    <mvc:mapping path="/user/**" />
+			<mvc:exclude-mapping path="/resourcesCenter/center" />
+			<mvc:exclude-mapping path="/resourcesCenter/saveComment" />
+			<mvc:exclude-mapping path="/resourcesCenter/getResourceDetail"/>
+			<mvc:exclude-mapping path="/file/getbusinessOriginalImage"/>
+			<mvc:exclude-mapping path="/file/getBusinessThumbnailsImage"/>
+			<mvc:exclude-mapping path="/file/downloadBusinessFile"/>
+			<mvc:exclude-mapping path="/resources/downloadResource"/>
+			<mvc:exclude-mapping path="/resourcesCenter/getResourceDetail" />
+			<mvc:exclude-mapping path="/file/resourcesVideoPlay" />
+			<mvc:exclude-mapping path="/resourcesCenter/playVideoView" />
+			<mvc:exclude-mapping path="/resourcesCenter/playmusiclist" />
+			
+			<bean class="com.inred.media.interceptor.AuthInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/WEB-INF/views/" p:suffix=".jsp" />
+
+
+	<bean id="logService" class="com.inred.media.aoplog.LogServiceImpl"></bean>
+	<aop:config>
+		<!-- 切入点 -->
+		<aop:pointcut expression="execution(* com.inred.media.controller.*.*(..))"
+			id="myPointcut" />
+		<!-- 切面： 将哪个对象中的哪个方法，织入到哪个切入点 -->
+		<aop:aspect ref="logService">
+			<aop:before method="logBeforeArg" pointcut-ref="myPointcut" />
+			<aop:after-returning method="logAfterReturning"
+				returning="returnObj" pointcut-ref="myPointcut" />
+			<aop:after-throwing method="logAfterThrowing"
+				throwing="e" pointcut-ref="myPointcut" />
+		</aop:aspect>
+	</aop:config>
+
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- set the max upload size 100M -->
+		<property name="maxUploadSize">
+			<value>10485760000</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>1024000</value>
+		</property>
+	</bean>
+</beans>
+
